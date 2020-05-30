@@ -6,5 +6,6 @@ target/
 ### IntelliJ IDEA ###
 .idea
 *.iml
+*.map
 
 application-dev.properties
