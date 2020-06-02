@@ -1,6 +1,12 @@
 # TaskAgile
 
-Open source task management tool built with Vue.js 2, Spring Boot 2, and MariaDB 10.2.21
+Open source task management tool built with 
+
+Vue.js 2
+
+Spring Boot 2
+
+MariaDB 10.2.21
 
 ## Commands
 

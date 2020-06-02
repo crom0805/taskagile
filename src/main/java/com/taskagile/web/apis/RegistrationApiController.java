@@ -17,25 +17,25 @@ import javax.validation.Valid;
 @Controller
 public class RegistrationApiController {
 
-	private UserService service;
+  private UserService service;
 
-	public RegistrationApiController(UserService service) {
-		this.service = service;
-	}
+  public RegistrationApiController(UserService service) {
+    this.service = service;
+  }
 
-	@PostMapping("/api/registrations")
-	public ResponseEntity<ApiResult> register(@Valid @RequestBody RegistrationPayload payload) {
-		try {
-			service.register(payload.toCommand());
-			return Result.created();
-		} catch (RegistrationException e) {
-			String errorMessage = "Registration failed";
-			if (e instanceof UsernameExistsException) {
-				errorMessage = "Username already exists";
-			} else if (e instanceof EmailAddressExistsException) {
-				errorMessage = "Email address already exists";
-			}
-			return Result.failure(errorMessage);
-		}
-	}
+  @PostMapping("/api/registrations")
+  public ResponseEntity<ApiResult> register(@Valid @RequestBody RegistrationPayload payload) {
+    try {
+      service.register(payload.toCommand());
+      return Result.created();
+    } catch (RegistrationException e) {
+      String errorMessage = "Registration failed";
+      if (e instanceof UsernameExistsException) {
+        errorMessage = "Username already exists";
+      } else if (e instanceof EmailAddressExistsException) {
+        errorMessage = "Email address already exists";
+      }
+      return Result.failure(errorMessage);
+    }
+  }
 }
