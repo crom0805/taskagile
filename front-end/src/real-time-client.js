@@ -18,6 +18,7 @@ class RealTimeClient {
       /* channel: [handler1, handler2] */
     }
   }
+
   init (serverUrl, token) {
     if (this.authenticated) {
       console.warn('[RealTimeClient] WS connection already authenticated.')
@@ -28,6 +29,7 @@ class RealTimeClient {
     this.token = token
     this.connect()
   }
+
   logout () {
     console.log('[RealTimeClient] Logging out')
     this.subscribeQueue = {}
@@ -36,6 +38,7 @@ class RealTimeClient {
     this.loggedOut = true
     this.socket && this.socket.close()
   }
+
   connect () {
     console.log('[RealTimeClient] Connecting to ' + this.serverUrl)
     this.socket = new SockJS(this.serverUrl + '?token=' + this.token)
@@ -54,6 +57,7 @@ class RealTimeClient {
       this._onClosed(event)
     }
   }
+
   subscribe (channel, handler) {
     if (!this._isConnected()) {
       this._addToSubscribeQueue(channel, handler)
@@ -67,6 +71,7 @@ class RealTimeClient {
     this.$bus.$on(this._channelEvent(channel), handler)
     console.log('[RealTimeClient] Subscribed to channel ' + channel)
   }
+
   unsubscribe (channel, handler) {
     // Already logged out, no need to unsubscribe
     if (this.loggedOut) {
@@ -85,9 +90,11 @@ class RealTimeClient {
     this.$bus.$off(this._channelEvent(channel), handler)
     console.log('[RealTimeClient] Unsubscribed from channel ' + channel)
   }
+
   _isConnected () {
     return this.socket && this.socket.readyState === SockJS.OPEN
   }
+
   _onConnected () {
     globalBus.$emit('RealTimeClient.connected')
     console.log('[RealTimeClient] Connected')
@@ -95,6 +102,7 @@ class RealTimeClient {
     // Handle subscribe and unsubscribe queue
     this._processQueues()
   }
+
   _onMessageReceived (event) {
     const message = JSON.parse(event.data)
     console.log('[RealTimeClient] Received message', message)
@@ -103,12 +111,15 @@ class RealTimeClient {
       this.$bus.$emit(this._channelEvent(message.channel), JSON.parse(message.payload))
     }
   }
+
   _send (message) {
     this.socket.send(JSON.stringify(message))
   }
+
   _onSocketError (error) {
     console.error('[RealTimeClient] Socket error', error)
   }
+
   _onClosed (event) {
     console.log('[RealTimeClient] Received close event', event)
     if (this.loggedOut) {
@@ -127,9 +138,11 @@ class RealTimeClient {
       }, 1000)
     }
   }
+
   _channelEvent (channel) {
     return 'channel:' + channel
   }
+
   _processQueues () {
     console.log('[RealTimeClient] Processing subscribe/unsubscribe queues')
 
@@ -153,6 +166,7 @@ class RealTimeClient {
       })
     })
   }
+
   _addToSubscribeQueue (channel, handler) {
     console.log('[RealTimeClient] Adding channel subscribe to queue. Channel: ' + channel)
     // To make sure the unsubscribe won't be sent out to the server
@@ -164,6 +178,7 @@ class RealTimeClient {
       handlers.push(handler)
     }
   }
+
   _addToUnsubscribeQueue (channel, handler) {
     console.log('[RealTimeClient] Adding channel unsubscribe to queue. Channel: ' + channel)
     // To make sure the subscribe won't be sent out to the server
@@ -175,10 +190,11 @@ class RealTimeClient {
       handlers.push(handlers)
     }
   }
+
   _removeFromQueue (queue, channel, handler) {
     const handlers = queue[channel]
     if (handlers) {
-      let index = handlers.indexOf(handler)
+      const index = handlers.indexOf(handler)
       if (index > -1) {
         handlers.splice(index, 1)
       }
