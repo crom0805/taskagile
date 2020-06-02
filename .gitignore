@@ -9,3 +9,5 @@ target/
 *.map
 
 application-dev.properties
+/src/main/resources/templates/*
+/src/main/resources/static/*

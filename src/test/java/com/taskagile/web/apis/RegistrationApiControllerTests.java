@@ -27,70 +27,76 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class RegistrationApiControllerTests {
 
-	@Autowired
-	private MockMvc mvc;
+  @Autowired
+  private MockMvc mvc;
 
-	@MockBean
-	private UserService serviceMock;
+  @MockBean
+  private UserService serviceMock;
 
-	@Test
-	public void register_blankPayload_shouldFailAndReturn400() throws Exception {
-		mvc.perform(post("/api/registrations"))
-			.andExpect(status().is(400));
-	}
+  @Test
+  public void register_blankPayload_shouldFailAndReturn400() throws Exception {
+    mvc.perform(post("/api/registrations"))
+      .andExpect(status().is(400));
+  }
 
-	@Test
-	public void register_existedUsername_shouldFailAndReturn400() throws Exception {
-		RegistrationPayload payload = new RegistrationPayload();
-		payload.setUsername("exist");
-		payload.setEmailAddress("test@taskagile.com");
-		payload.setPassword("MyPassword!");
+  @Test
+  public void register_existedUsername_shouldFailAndReturn400() throws Exception {
+    RegistrationPayload payload = new RegistrationPayload();
+    payload.setUsername("exist");
+    payload.setEmailAddress("test@taskagile.com");
+    payload.setPassword("MyPassword!");
+    payload.setFirstName("User");
+    payload.setLastName("Test");
 
-		doThrow(UsernameExistsException.class)
-			.when(serviceMock)
-			.register(payload.toCommand());
+    doThrow(UsernameExistsException.class)
+      .when(serviceMock)
+      .register(payload.toCommand());
 
-		mvc.perform(
-			post("/api/registrations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtils.toJson(payload)))
-			.andExpect(status().is(400))
-			.andExpect(jsonPath("$.message").value("Username already exists"));
-	}
+    mvc.perform(
+      post("/api/registrations")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(JsonUtils.toJson(payload)))
+      .andExpect(status().is(400))
+      .andExpect(jsonPath("$.message").value("Username already exists"));
+  }
 
-	@Test
-	public void register_existedEmailAddress_shouldFailAndReturn400() throws Exception {
-		RegistrationPayload payload = new RegistrationPayload();
-		payload.setUsername("test");
-		payload.setEmailAddress("exist@taskagile.com");
-		payload.setPassword("MyPassword!");
+  @Test
+  public void register_existedEmailAddress_shouldFailAndReturn400() throws Exception {
+    RegistrationPayload payload = new RegistrationPayload();
+    payload.setUsername("test");
+    payload.setEmailAddress("exist@taskagile.com");
+    payload.setPassword("MyPassword!");
+    payload.setFirstName("User");
+    payload.setLastName("Test");
 
-		doThrow(EmailAddressExistsException.class)
-			.when(serviceMock)
-			.register(payload.toCommand());
+    doThrow(EmailAddressExistsException.class)
+      .when(serviceMock)
+      .register(payload.toCommand());
 
-		mvc.perform(
-			post("/api/registrations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtils.toJson(payload)))
-			.andExpect(status().is(400))
-			.andExpect(jsonPath("$.message").value("Email address already exists"));
-	}
+    mvc.perform(
+      post("/api/registrations")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(JsonUtils.toJson(payload)))
+      .andExpect(status().is(400))
+      .andExpect(jsonPath("$.message").value("Email address already exists"));
+  }
 
-	@Test
-	public void register_validPayload_shouldSucceedAndReturn201() throws Exception {
-		RegistrationPayload payload = new RegistrationPayload();
-		payload.setUsername("sunny");
-		payload.setEmailAddress("sunny@taskagile.com");
-		payload.setPassword("MyPassword!");
+  @Test
+  public void register_validPayload_shouldSucceedAndReturn201() throws Exception {
+    RegistrationPayload payload = new RegistrationPayload();
+    payload.setUsername("sunny");
+    payload.setEmailAddress("sunny@taskagile.com");
+    payload.setPassword("MyPassword!");
+    payload.setFirstName("User");
+    payload.setLastName("Test");
 
-		doNothing().when(serviceMock)
-			.register(payload.toCommand());
+    doNothing().when(serviceMock)
+      .register(payload.toCommand());
 
-		mvc.perform(
-			post("/api/registrations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtils.toJson(payload)))
-			.andExpect(status().is(201));
-	}
+    mvc.perform(
+      post("/api/registrations")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(JsonUtils.toJson(payload)))
+      .andExpect(status().is(201));
+  }
 }
