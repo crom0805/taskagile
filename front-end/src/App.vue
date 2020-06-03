@@ -60,7 +60,7 @@ export default {
 
                 .error {
                     line-height: 1;
-                    display: none;
+                    display: block;
                     margin-top: 5px;
                 }
             }
