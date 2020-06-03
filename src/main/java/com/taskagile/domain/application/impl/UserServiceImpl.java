@@ -1,12 +1,13 @@
 package com.taskagile.domain.application.impl;
 
 import com.taskagile.domain.application.UserService;
-import com.taskagile.domain.application.commands.RegistrationCommand;
+import com.taskagile.domain.application.commands.RegisterCommand;
 import com.taskagile.domain.common.event.DomainEventPublisher;
 import com.taskagile.domain.common.mail.MailManager;
 import com.taskagile.domain.common.mail.MessageVariable;
 import com.taskagile.domain.model.user.*;
 import com.taskagile.domain.model.user.events.UserRegisteredEvent;
+import com.taskagile.infrastructure.messaging.AmqpDomainEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
   private UserRepository userRepository;
 
   public UserServiceImpl(RegistrationManagement registrationManagement,
-                         DomainEventPublisher domainEventPublisher,
+                         AmqpDomainEventPublisher domainEventPublisher,
                          MailManager mailManager,
                          UserRepository userRepository) {
     this.registrationManagement = registrationManagement;
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void register(RegistrationCommand command) throws RegistrationException {
+  public void register(RegisterCommand command) throws RegistrationException {
     Assert.notNull(command, "Parameter `command` must not be null");
     User newUser = registrationManagement.register(
       command.getUsername(),
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
       command.getPassword());
 
     sendWelcomeMessage(newUser);
-    domainEventPublisher.publish(new UserRegisteredEvent(this, newUser));
+    domainEventPublisher.publish(new UserRegisteredEvent(newUser, command));
   }
 
   private void sendWelcomeMessage(User user) {

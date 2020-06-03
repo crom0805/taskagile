@@ -101,6 +101,10 @@
                     <button type="submit" class="btn btn-primary btn-block">{{ $t('registerPage.form.submit') }}
                     </button>
                     <p class="accept-terms text-muted">
+                        <i18n path="registerPage.form.terms.accept" tag="p" class="accept-terms text-muted">
+                            <a place="termsOfService" href="#">{{ $t('registerPage.form.terms.termsOfService') }}</a>
+                            <a place="privacyPolicy" href="#">{{ $t('registerPage.form.terms.privacyPolicy') }}</a>
+                        </i18n>
                     </p>
                     <p class="text-center text-muted">{{ $t('registerPage.form.alreadyHaveAccount') }}
                         <router-link to="login">{{ $t("registerPage.form.signIn") }}</router-link>

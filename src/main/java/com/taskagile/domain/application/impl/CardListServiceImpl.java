@@ -8,6 +8,7 @@ import com.taskagile.domain.model.board.BoardId;
 import com.taskagile.domain.model.cardlist.CardList;
 import com.taskagile.domain.model.cardlist.CardListRepository;
 import com.taskagile.domain.model.cardlist.events.CardListAddedEvent;
+import com.taskagile.infrastructure.messaging.AmqpDomainEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,7 +22,7 @@ public class CardListServiceImpl implements CardListService {
   private DomainEventPublisher domainEventPublisher;
 
   public CardListServiceImpl(CardListRepository cardListRepository,
-                             DomainEventPublisher domainEventPublisher) {
+                             AmqpDomainEventPublisher domainEventPublisher) {
     this.cardListRepository = cardListRepository;
     this.domainEventPublisher = domainEventPublisher;
   }
@@ -37,7 +38,7 @@ public class CardListServiceImpl implements CardListService {
       command.getUserId(), command.getName(), command.getPosition());
 
     cardListRepository.save(cardList);
-    domainEventPublisher.publish(new CardListAddedEvent(this, cardList));
+    domainEventPublisher.publish(new CardListAddedEvent(cardList, command));
     return cardList;
   }
 

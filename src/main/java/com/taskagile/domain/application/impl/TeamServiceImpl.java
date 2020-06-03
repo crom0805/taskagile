@@ -8,6 +8,7 @@ import com.taskagile.domain.model.team.TeamId;
 import com.taskagile.domain.model.team.TeamRepository;
 import com.taskagile.domain.model.team.events.TeamCreatedEvent;
 import com.taskagile.domain.model.user.UserId;
+import com.taskagile.infrastructure.messaging.AmqpDomainEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,7 +21,7 @@ public class TeamServiceImpl implements TeamService {
   private TeamRepository teamRepository;
   private DomainEventPublisher domainEventPublisher;
 
-  public TeamServiceImpl(TeamRepository teamRepository, DomainEventPublisher domainEventPublisher) {
+  public TeamServiceImpl(TeamRepository teamRepository, AmqpDomainEventPublisher domainEventPublisher) {
     this.teamRepository = teamRepository;
     this.domainEventPublisher = domainEventPublisher;
   }
@@ -39,7 +40,7 @@ public class TeamServiceImpl implements TeamService {
   public Team createTeam(CreateTeamCommand command) {
     Team team = Team.create(command.getName(), command.getUserId());
     teamRepository.save(team);
-    domainEventPublisher.publish(new TeamCreatedEvent(this, team));
+    domainEventPublisher.publish(new TeamCreatedEvent(team, command));
     return team;
   }
 }
