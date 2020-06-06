@@ -8,6 +8,8 @@ Spring Boot 2
 
 MariaDB 10.2.21
 
+http://ec2-13-209-31-172.ap-northeast-2.compute.amazonaws.com:8080/
+
 ## Commands
 
 - Use `mvn install` to build both the front-end and the back-end
