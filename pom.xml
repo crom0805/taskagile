@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.taskagile</groupId>
-	<artifactId>app</artifactId>
+	<artifactId>taskagile</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Task Agile</name>
 	<description>Open Source Task Management Tool</description>
