@@ -1,19 +1,18 @@
 # TaskAgile
-
-Open source task management tool built with 
-
-Vue.js 2
-
-Spring Boot 2
-
-MariaDB 10.2.21
+Open source task management tool
 
 http://ec2-13-209-31-172.ap-northeast-2.compute.amazonaws.com:8080/
 
-## Commands
+![login](https://taskagile.s3.ap-northeast-2.amazonaws.com/1591539178511.b55ecd04-8636-48bc-ae23-de8bb1a8a545.jpg)
 
-- Use `mvn install` to build both the front-end and the back-end
-- Use `mvn test` to run the tests of the back-end and the front-end
-- Use `mvn spring-boot:run` to start the back-end
-- Use `npm run serve` inside the `front-end` directory to start the front-end
-- Use `java -jar target/app-0.0.1-SNAPSHOT.jar` to start the bundled application
+![taskagile](https://taskagile.s3.ap-northeast-2.amazonaws.com/1591539121878.497d4af4-d855-4424-ae0a-fe43a3c08403.jpg)
+
+## 개발환경
+
+Front-end : Vue.js 2.6.11
+
+Back-end : Spring Boot 2.2.5
+
+DB : MariaDB 10.2.21
+
+기타 : RabbitMQ(AMQP), GraphicsMagick(Image Resizing), AWS EC2, AWS S3
